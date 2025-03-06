@@ -11,28 +11,22 @@ struct ProgressionModel: Codable, Identifiable  {
     var name: String
     var id: UUID
     var numberOfChords: Int
-    var baseScale: String
-    var evokedFeelings: String
-    var songsThatUseIt: [String]
+    var sensations: String
     var chords: [String]
     
-    init(name: String, id: UUID, numberOfChords: Int, baseScale: String, evokedFeelings: String, songsThatUseIt: [String], chords: [String]) {
+    init(name: String, numberOfChords: Int, sensations: String, chords: [String]) {
         self.name = name
-        self.id = id
+        self.id = UUID()
         self.numberOfChords = numberOfChords
-        self.baseScale = baseScale
-        self.evokedFeelings = evokedFeelings
-        self.songsThatUseIt = songsThatUseIt
+        self.sensations = sensations
         self.chords = chords
     }
     
-    init(progressionEntity: Progression) {
-        self.name = progressionEntity.name ?? ""
-        self.id = progressionEntity.id ?? .init()
-        self.numberOfChords = Int(progressionEntity.numberOfChords)
-        self.baseScale = progressionEntity.baseScale ?? "Major"
-        self.evokedFeelings = progressionEntity.evokedFeelings ?? ""
-        self.songsThatUseIt = progressionEntity.songsThatUseIt as! [String]
-        self.chords = progressionEntity.chords as! [String]
+    init(progressionEntity: Progression?) {
+        self.name = progressionEntity?.name ?? ""
+        self.id = UUID()
+        self.numberOfChords = Int(progressionEntity?.numberOfChords ?? 2)
+        self.sensations = progressionEntity?.sensations ?? ""
+        self.chords = progressionEntity?.chords as! [String]
     }
 }

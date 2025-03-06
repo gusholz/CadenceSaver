@@ -8,14 +8,25 @@
 import SwiftUI
 
 final class HomeViewModel: ObservableObject {
-    @Published var isEmpty: Bool
+    @Published var progressionList: [ProgressionModel] = [];
+    let progressionManager: ProgressionManager
     
-    init(isEmpty: Bool) {
-        self.isEmpty = isEmpty
+    init(progressionManager: ProgressionManager) {
+        self.progressionManager = progressionManager
     }
     
-    func createProgression() {
+    func updateList() {
+        guard let fetchedList = progressionManager.getAllProgressions() else {
+            return
+        }
         
+        self.progressionList = fetchedList
+    }
+    
+    func createProgression(progressionName: String, sensations: String, numberOfChords: Int, chords: [String]) {
+        let newProgression = ProgressionModel(name: progressionName, numberOfChords: numberOfChords, sensations: sensations, chords: chords)
+        progressionManager.createProgression(progression: newProgression)
+        self.updateList()
     }
     
     func deleteProgression() {

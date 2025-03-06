@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewmodel = HomeViewModel(isEmpty: true)
+    @StateObject var viewModel = HomeViewModel(progressionManager: ProgressionManager.shared)
+    @State private var isSheetActive = false;
 
     var body: some View {
         VStack(alignment: .center) {
@@ -18,14 +19,23 @@ struct HomeView: View {
                 Spacer()
             }
             Divider()
-            if viewmodel.isEmpty {
+            if viewModel.progressionList.isEmpty {
                 Text("Nenhuma progressão salva :c")
+            } else {
+                ForEach(viewModel.progressionList, id: \.id) { progression in
+                    ProgressionCard(progression: progression)
+                }
             }
-            // Progression Card
             Spacer()
             CustomButton(buttonLabel: "Adicionar Progressão") {
-                
+                isSheetActive = true;
             }
+            .sheet(isPresented: $isSheetActive) {
+                AddProgressionView(homeViewModel: viewModel)
+            }
+        }
+        .onAppear {
+            viewModel.updateList()
         }
         .padding()
     }
