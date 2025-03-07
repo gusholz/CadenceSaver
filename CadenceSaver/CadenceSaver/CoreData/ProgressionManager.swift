@@ -26,7 +26,6 @@ struct ProgressionManager {
             }
             let decodedProgressions = result.map { progression in
                 let model = ProgressionModel(progressionEntity: progression)
-                print("Decoded progression: \(model)")
                 return model
             }
             return decodedProgressions
@@ -36,7 +35,6 @@ struct ProgressionManager {
         }
     }
 
-    
     func createProgression(progression: ProgressionModel) {
         let newProgression = Progression(context: context)
         newProgression.id = UUID()
@@ -58,5 +56,21 @@ struct ProgressionManager {
             print(error.localizedDescription)
         }
     }
-
+    
+    func deleteProgressionById(_ id: UUID) {
+        let fetchRequest: NSFetchRequest<Progression> = Progression.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            
+        do {
+            let result = try context.fetch(fetchRequest)
+            let progression = result.first
+                        
+            if let progression = progression {
+                context.delete(progression)
+                try context.save()
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }

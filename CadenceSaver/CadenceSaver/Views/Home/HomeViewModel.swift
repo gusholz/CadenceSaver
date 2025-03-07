@@ -13,8 +13,10 @@ final class HomeViewModel: ObservableObject {
     
     init(progressionManager: ProgressionManager) {
         self.progressionManager = progressionManager
+        self.updateList()
     }
     
+    // TODO: When the list goes to 0, the home doesn't display the correspondent view for empty progressionList
     func updateList() {
         guard let fetchedList = progressionManager.getAllProgressions() else {
             return
@@ -29,8 +31,9 @@ final class HomeViewModel: ObservableObject {
         self.updateList()
     }
     
-    func deleteProgression() {
-        
+    func deleteProgression(id: UUID) {
+        progressionManager.deleteProgressionById(id)
+        self.updateList()
     }
     
     func editProgression() {

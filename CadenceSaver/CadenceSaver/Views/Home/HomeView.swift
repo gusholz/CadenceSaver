@@ -22,9 +22,25 @@ struct HomeView: View {
             if viewModel.progressionList.isEmpty {
                 Text("Nenhuma progressão salva :c")
             } else {
-                ForEach(viewModel.progressionList, id: \.id) { progression in
-                    ProgressionCard(progression: progression)
+                List {
+                    ForEach(viewModel.progressionList, id: \.id) { progression in
+                        ProgressionCard(progression: progression)
+                            .swipeActions(allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    viewModel.deleteProgression(id: progression.id)
+                                } label: {
+                                    Label("Delete", systemImage: "trash.fill")
+                                }
+                                
+                                Button("Edit") {
+                                    print("Awesome!")
+                                }
+                                .tint(.blue)
+                                
+                            }
+                    }
                 }
+                .listStyle(.plain)
             }
             Spacer()
             CustomButton(buttonLabel: "Add Progression") {

@@ -24,7 +24,7 @@ struct ProgressionModel: Codable, Identifiable  {
     
     init(progressionEntity: Progression?) {
         self.name = progressionEntity?.name ?? ""
-        self.id = UUID()
+        self.id = progressionEntity?.id ?? .init()
         self.numberOfChords = Int(progressionEntity?.numberOfChords ?? 2)
         self.sensations = progressionEntity?.sensations ?? ""
 
@@ -41,3 +41,18 @@ struct ProgressionModel: Codable, Identifiable  {
     }
 
 }
+
+extension ProgressionModel: Equatable {
+    
+    static func == (lhs: ProgressionModel, rhs: ProgressionModel) -> Bool {
+        return lhs.numberOfChords == rhs.numberOfChords &&
+        lhs.name == rhs.name &&
+        lhs.sensations == rhs.sensations &&
+        lhs.id == rhs.id
+    }
+    
+    static func != (lhs: ProgressionModel, rhs: ProgressionModel) -> Bool {
+        return !(lhs == rhs)
+    }
+}
+
