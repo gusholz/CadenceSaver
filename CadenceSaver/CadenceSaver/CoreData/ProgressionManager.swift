@@ -24,20 +24,31 @@ struct ProgressionManager {
             if result.isEmpty {
                 return nil
             }
-            return result.map { progression in
-                    .init(progressionEntity: progression)
+            let decodedProgressions = result.map { progression in
+                let model = ProgressionModel(progressionEntity: progression)
+                print("Decoded progression: \(model)")
+                return model
             }
+            return decodedProgressions
         } catch {
-            print(error.localizedDescription)
+            print("Error fetching progressions: \(error.localizedDescription)")
             return nil
         }
     }
+
     
     func createProgression(progression: ProgressionModel) {
         let newProgression = Progression(context: context)
         newProgression.id = UUID()
         newProgression.name = progression.name
-        newProgression.chords = progression.chords as NSObject
+        
+        do {
+            let encodedChords = try JSONEncoder().encode(progression.chords)
+            newProgression.chords = encodedChords
+        } catch {
+            print("Error encoding chords: \(error.localizedDescription)")
+        }
+
         newProgression.numberOfChords = Int16(progression.numberOfChords)
         newProgression.sensations = progression.sensations
         
@@ -47,4 +58,5 @@ struct ProgressionManager {
             print(error.localizedDescription)
         }
     }
+
 }

@@ -23,7 +23,7 @@ final class HomeViewModel: ObservableObject {
         self.progressionList = fetchedList
     }
     
-    func createProgression(progressionName: String, sensations: String, numberOfChords: Int, chords: [String]) {
+    func createProgression(progressionName: String, sensations: String, numberOfChords: Int, chords: [Chord]) {
         let newProgression = ProgressionModel(name: progressionName, numberOfChords: numberOfChords, sensations: sensations, chords: chords)
         progressionManager.createProgression(progression: newProgression)
         self.updateList()

@@ -12,9 +12,9 @@ struct ProgressionModel: Codable, Identifiable  {
     var id: UUID
     var numberOfChords: Int
     var sensations: String
-    var chords: [String]
+    var chords: [Chord]
     
-    init(name: String, numberOfChords: Int, sensations: String, chords: [String]) {
+    init(name: String, numberOfChords: Int, sensations: String, chords: [Chord]) {
         self.name = name
         self.id = UUID()
         self.numberOfChords = numberOfChords
@@ -27,6 +27,17 @@ struct ProgressionModel: Codable, Identifiable  {
         self.id = UUID()
         self.numberOfChords = Int(progressionEntity?.numberOfChords ?? 2)
         self.sensations = progressionEntity?.sensations ?? ""
-        self.chords = progressionEntity?.chords as! [String]
+
+        if let chordsData = progressionEntity?.chords as? Data {
+            do {
+                self.chords = try JSONDecoder().decode([Chord].self, from: chordsData)
+            } catch {
+                print("Error decoding chords: \(error.localizedDescription)")
+                self.chords = []
+            }
+        } else {
+            self.chords = []
+        }
     }
+
 }

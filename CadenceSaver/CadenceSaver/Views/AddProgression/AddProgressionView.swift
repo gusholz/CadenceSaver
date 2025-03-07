@@ -22,7 +22,6 @@ struct AddProgressionView: View {
                 .textFieldStyle(.roundedBorder)
 
             
-            // Picker to choose the number of chords
             Picker("Number of chords", selection: $numberOfChords) {
                 ForEach(2...8, id: \.self) { num in
                     Text("\(num) Chords").tag(num)
@@ -35,8 +34,9 @@ struct AddProgressionView: View {
 
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(0..<viewModel.chords.count, id: \.self) { index in
-                        AddChordCard(chord: $viewModel.chords[index])
+                    ForEach($viewModel.chords, id: \.id) { chord in
+                        AddChordCard(position: chord.position, type: chord.type)
+                            .padding()
                     }
                 }
             }

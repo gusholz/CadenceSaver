@@ -27,7 +27,7 @@ struct HomeView: View {
                 }
             }
             Spacer()
-            CustomButton(buttonLabel: "Adicionar Progressão") {
+            CustomButton(buttonLabel: "Add Progression") {
                 isSheetActive = true;
             }
             .sheet(isPresented: $isSheetActive) {
